@@ -1,0 +1,27 @@
+{
+  "name": "journal-bot",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "set-webhook": "node scripts/set-webhook.mjs",
+    "webhook-info": "node scripts/set-webhook.mjs --info"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.115.0",
+    "next": "^15.5.4",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/react": "^19.1.1",
+    "typescript": "^5.7.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
