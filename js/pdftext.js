@@ -1,7 +1,7 @@
 // Turns a PDF File into plain text lines using a locally vendored pdf.js (no CDN, no upload).
-import * as pdfjs from '../vendor/pdf.min.mjs';
+import * as pdfjs from '../vendor/pdf.min.js';
 
-pdfjs.GlobalWorkerOptions.workerSrc = new URL('../vendor/pdf.worker.min.mjs', import.meta.url).href;
+pdfjs.GlobalWorkerOptions.workerSrc = new URL('../vendor/pdf.worker.min.js', import.meta.url).href;
 
 /** Rebuild visual lines by bucketing text items on their y coordinate. */
 function itemsToLines(items) {

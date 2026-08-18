@@ -15,8 +15,42 @@ Any static file server works, because it is just HTML and ES modules:
 python3 -m http.server 8080     # then open http://localhost:8080
 ```
 
-To put it online, push this repo and enable **GitHub Pages** on the branch (Settings →
-Pages → deploy from branch, root folder). Vercel or Netlify work with zero config too.
+### Deploying to Vercel
+
+The repo ships a `vercel.json`, so there is nothing to configure in the dashboard:
+
+1. [vercel.com/new](https://vercel.com/new) → import `estebangonzalezuy/journal`.
+2. Framework preset: **Other**. Leave the build command and install command empty —
+   there is no build step.
+3. Deploy.
+
+From the CLI instead: `npx vercel` for a preview URL, `npx vercel --prod` to promote it.
+
+Pushes to the branch redeploy automatically once the project is linked, and every branch
+gets its own preview URL.
+
+**What `vercel.json` sets up:**
+
+- A **Content-Security-Policy** that allows only same-origin code, the pdf.js worker
+  (`worker-src blob:`) and `https://api.notion.com` for write-back — nothing else can be
+  contacted from the page. This was tested in a real browser against those exact headers;
+  parsing a PDF produces zero CSP violations.
+- `nosniff`, `no-referrer`, `X-Frame-Options: DENY` and HSTS.
+- Long-lived immutable caching for `vendor/`, revalidate-always for the app's own JS/CSS
+  so a deploy takes effect immediately instead of serving stale code.
+
+**On privacy:** a Vercel deployment is a public URL, but it exposes only the app itself —
+your transactions and Notion token live in your browser's `localStorage` and are never
+part of the deployment. Someone who finds the URL sees an empty tracker. If you would
+rather it not be reachable at all, Vercel's Deployment Protection (password or SSO) is a
+per-project toggle under Settings → Deployment Protection.
+
+### Other hosts
+
+**GitHub Pages** works too (Settings → Pages → deploy from branch, root folder), though it
+ignores `vercel.json`, so you would not get the security headers. Netlify works with zero
+config as well.
+
 Because the data lives in the browser's `localStorage`, the app is per-device: use the
 same browser each month, or move data with the backup export.
 
@@ -115,4 +149,5 @@ js/notion.js          markdown + Notion blocks + API calls
 js/seed.js            historical months pulled from Notion
 js/views/             resumen · importar · movimientos · historico · ajustes
 vendor/               pdf.js (vendored, no CDN)
+vercel.json           static hosting config + security headers
 ```
